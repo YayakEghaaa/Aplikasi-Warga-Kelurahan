@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Konfirmasi Hapus Warga</title>
+</head>
+<body>
+    <h1>Hapus Data Warga</h1>
+    
+    <p>Apakah Anda yakin ingin menghapus data warga:</p>
+    <p><strong>{{ object.nama_lengkap }}</strong> (NIK: {{ object.nik }})?</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" style="background-color: red; color: white; padding: 10px 20px;">Ya, Hapus</button>
+        <a href="{% url 'warga-detail' object.pk %}" style="padding: 10px 20px; text-decoration: none;">Batal</a>
+    </form>
+    
+    <br>
+    <a href="{% url 'warga-list' %}">← Kembali ke Daftar Warga</a>
+</body>
+</html>

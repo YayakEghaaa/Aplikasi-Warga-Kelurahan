@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tambah Warga Baru</title>
+</head>
+<body>
+    <h1>Form Pendaftaran Warga Baru</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Simpan Warga</button>
+    </form>
+    
+    <br>
+    <a href="{% url 'warga-list' %}">← Kembali ke Daftar Warga</a>
+</body>
+</html>
