@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detail Warga</title>
+</head>
+<body>
+    <h1>Detail Warga: {{ object.nama_lengkap }}</h1>
+    <div style="margin-bottom: 20px;">
+        <a href="{% url 'warga-edit' object.pk %}" style="background-color: blue; color: white; padding: 8px 16px; text-decoration: none;">✏️ Edit Data</a>
+        <a href="{% url 'warga-hapus' object.pk %}" style="background-color: red; color: white; padding: 8px 16px; text-decoration: none;">🗑️ Hapus Data</a>
+    </div>
+    <hr>
+    
+    <p><strong>Nama Lengkap:</strong> {{ object.nama_lengkap }}</p>
+    <p><strong>NIK:</strong> {{ object.nik }}</p>
+    <p><strong>Alamat:</strong> {{ object.alamat }}</p>
+    <p><strong>Nomor Telepon:</strong> {{ object.no_telepon }}</p>
+    <p><strong>Tanggal Registrasi:</strong> {{ object.tanggal_registrasi }}</p>
+
+    <hr>
+    
+    <h2>Daftar Pengaduan oleh {{ object.nama_lengkap }}</h2>
+    
+    <ul>
+        {% for aduan in object.pengaduan.all %}
+            <li>
+                <strong>{{ aduan.judul }}</strong> (Status: {{ aduan.get_status_display }})
+                <p>{{ aduan.deskripsi }}</p>
+                <small>Dilaporkan pada: {{ aduan.tanggal_lapor }}</small>
+            </li>
+        {% empty %}
+            <li>Warga ini belum pernah membuat pengaduan.</li>
+        {% endfor %}
+    </ul>
+
+    <br>
+    <a href="{% url 'warga-list' %}">← Kembali ke Daftar Warga</a>
+</body>
+</html>
