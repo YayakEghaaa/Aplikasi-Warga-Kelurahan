@@ -7,6 +7,9 @@ from .forms import WargaForm, PengaduanForm
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from .serializers import WargaSerializer, PengaduanSerializer
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
+from rest_framework.filters import SearchFilter, OrderingFilter 
+
 
 class WargaListView(ListView):
     model         = Warga
@@ -70,17 +73,36 @@ class PengaduanDeleteView(DeleteView):
 # class PengaduanDetailAPIView(RetrieveAPIView):
 #     queryset = Pengaduan.objects.all()
 #     serializer_class = PengaduanSerializer
-    
-class WargaViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint yang memungkinkan data warga dilihat, dibuat, diubah, atau dihapus.
-    """
-    queryset = Warga.objects.all().order_by('-tanggal_registrasi')
-    serializer_class = WargaSerializer
-
 class PengaduanViewSet(viewsets.ModelViewSet):
     """
     API endpoint yang memungkinkan data pengaduan dilihat, dibuat, diubah, atau dihapus.
     """
     queryset = Pengaduan.objects.all().order_by('-tanggal_lapor')
     serializer_class = PengaduanSerializer
+
+class WargaViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint untuk CRUD data warga.
+    PUBLIC: Bisa lihat (GET)
+    AUTHENTICATED: Bisa semua (GET, POST, PUT, DELETE)
+    """
+    queryset = Warga.objects.all().order_by('-tanggal_registrasi')
+    serializer_class = WargaSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['nama_lengkap', 'nik', 'alamat']
+    ordering_fields = ['nama_lengkap', 'tanggal_registrasi']
+
+class PengaduanViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint untuk CRUD data pengaduan.
+    HANYA ADMIN: Bisa semua
+    """
+    queryset = Pengaduan.objects.all().order_by('-tanggal_lapor')
+    serializer_class = PengaduanSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['judul', 'deskripsi']
+    ordering_fields = ['status', 'tanggal_lapor']
+    # Tetap menggunakan DEFAULT_PERMISSION_CLASSES (IsAuthenticated)
+    # Bisa juga diatur: permission_classes = [IsAdminUser]
