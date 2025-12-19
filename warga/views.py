@@ -7,6 +7,7 @@ from .forms import WargaForm, PengaduanForm
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from .serializers import WargaSerializer, PengaduanSerializer
 from rest_framework import viewsets
+from rest_framework.permissions import AllowAny
 
 class WargaListView(ListView):
     model         = Warga
@@ -77,6 +78,7 @@ class WargaViewSet(viewsets.ModelViewSet):
     """
     queryset = Warga.objects.all().order_by('-tanggal_registrasi')
     serializer_class = WargaSerializer
+    permission_classes = [AllowAny]
 
 class PengaduanViewSet(viewsets.ModelViewSet):
     """
